@@ -16,31 +16,31 @@ class CartController extends Controller
         $this->productService = $productService;
     }
 
-    public function add(Request $request)
-    {
-        if ($request->ajax()) {
-            $product = $this->productService->find($request->productId);
+    // public function add(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $product = $this->productService->find($request->productId);
 
-            $response['cart'] = Cart::add([
-                'id' => $product->id,
-                'name' => $product->name,
-                'qty' => 1,
-                'price' => $product->discount ?? $product->price,
-                'weight' => $product->weight ?? 0,
-                'options' => [
-                    'images' => $product->productImages,
-                    'size' => 'S',
-                ], 
-            ]);
+    //         $response['cart'] = Cart::add([
+    //             'id' => $product->id,
+    //             'name' => $product->name,
+    //             'qty' => 1,
+    //             'price' => $product->discount ?? $product->price,
+    //             'weight' => $product->weight ?? 0,
+    //             'options' => [
+    //                 'images' => $product->productImages,
+    //                 'size' => 'S',
+    //             ], 
+    //         ]);
 
-            $response['count'] = Cart::count();
-            $response['total'] = Cart::total();
+    //         $response['count'] = Cart::count();
+    //         $response['total'] = Cart::total();
 
-            return $response;
-        }
+    //         return $response;
+    //     }
 
-        return back();
-    }
+    //     return back();
+    // }
 
     public function index()
     {

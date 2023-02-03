@@ -81,7 +81,7 @@
                                     <li>Product <span>Total</span></li>
                                     @foreach ($order->orderDetails as $orderDetail)
                                         <li class="fw-normal">
-                                            {{ $orderDetail->product->name }} x {{ $orderDetail->qty }} 
+                                            {{ $orderDetail->product->name }} {{ $orderDetail->size }} x {{ $orderDetail->qty }} 
                                             <span>${{ $orderDetail->total }}</span>
                                         </li>
                                     @endforeach

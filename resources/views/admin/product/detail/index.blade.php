@@ -49,12 +49,7 @@
                                         </div>
                                     </form>
 
-                                    <div class="btn-actions-pane-right">
-                                        <div role="group" class="btn-group-sm btn-group">
-                                            <button class="btn btn-focus">This week</button>
-                                            <button class="active btn btn-focus">Anytime</button>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
 
                                 <div class="table-responsive">

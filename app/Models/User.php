@@ -25,7 +25,8 @@ class User extends Authenticatable
         'avatar',
         'level',
         'description',
-
+        'token',
+        
         'company_name',
         'country',
         'street_address',

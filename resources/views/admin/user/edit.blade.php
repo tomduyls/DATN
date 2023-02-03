@@ -31,7 +31,7 @@
                                         @method('PUT')
 
                                         @include('admin.components.notification')
-                                        
+                                        <input type="hidden" name="id" value="{{ $user->id }}">
                                         <div class="position-relative row form-group">
                                             <label for="image"
                                                 class="col-md-3 text-md-right col-form-label">Avatar</label>
@@ -64,6 +64,9 @@
                                                 <input required name="email" id="email" placeholder="Email" type="email"
                                                     class="form-control" value="{{ $user->email }}">
                                             </div>
+                                            @error('email')
+                                                <span style="color:red;"> {{$message}}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="position-relative row form-group">

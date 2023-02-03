@@ -6,5 +6,5 @@ use App\Repositories\RepositoriesInterface;
 
 interface UserRepositoryInterface extends RepositoriesInterface
 {
-
+    public function getUserByEmail($email);
 }

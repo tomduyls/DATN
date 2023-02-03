@@ -94,13 +94,7 @@ class OrderController extends Controller
             $order = $this->orderService->find($id);
 
             foreach($order->orderDetails as $orderDetail) {
-                $productDetail = ProductDetail::where('product_id', $orderDetail->product_id)->where('size', $orderDetail->size)->get();
-                $productDetailQty = $productDetail[0]->qty + $orderDetail->qty;
-                ProductDetail::where('product_id', $orderDetail->product_id)->where('size', $orderDetail->size)->update(['qty' => $productDetailQty]);
-
-                $product = $this->productService->find($orderDetail->product_id);
-                $productQty = $product->qty + $orderDetail->qty;
-                $this->productService->update(['qty' => $productQty], $orderDetail->product_id);
+                $this->updateQty($orderDetail);
             }
         }
             
@@ -117,5 +111,16 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateQty($orderDetail) 
+    {
+        $productDetail = ProductDetail::where('product_id', $orderDetail->product_id)->where('size', $orderDetail->size)->get();
+        $productDetailQty = $productDetail[0]->qty + $orderDetail->qty;
+        ProductDetail::where('product_id', $orderDetail->product_id)->where('size', $orderDetail->size)->update(['qty' => $productDetailQty]);
+
+        $product = $this->productService->find($orderDetail->product_id);
+        $productQty = $product->qty + $orderDetail->qty;
+        $this->productService->update(['qty' => $productQty], $orderDetail->product_id);
     }
 }

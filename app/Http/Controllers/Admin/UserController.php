@@ -47,6 +47,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $email = User::where('email', $request->email)->get();
+        
+        if($email->count() != 0) {
+            return back()->with('notification', "Error: Email already exists");
+        }
+
         if ($request->get('password') != $request->get('password_confirmation')) {
             return back()->with('notification', 'Error: Confirm password does not match');
         }
@@ -95,6 +101,9 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $request->validate([
+            'email' => 'unique:users,email,'.$user->id
+        ]);
         $data = $request->all();
 
         //Xu ly mat khau

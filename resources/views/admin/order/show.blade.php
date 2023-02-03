@@ -34,6 +34,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Product</th>
+                                                    <th class="text-center">Size</th>
                                                     <th class="text-center">Quantity</th>
                                                     <th class="text-center">Unit Price</th>
                                                     <th class="text-center">Total</th>
@@ -58,6 +59,9 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ $orderDetail->size }}
                                                         </td>
                                                         <td class="text-center">
                                                             {{ $orderDetail->qty }}

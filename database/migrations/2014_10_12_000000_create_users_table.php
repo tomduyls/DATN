@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->tinyInteger('level');
             $table->text('description')->nullable();
+            $table->string('token')->nullable();
 
             $table->string('company_name')->nullable();
             $table->string('country')->nullable();

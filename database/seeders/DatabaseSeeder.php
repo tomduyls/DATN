@@ -361,16 +361,6 @@ class DatabaseSeeder extends Seeder
                 'size' => 'XS',
                 'qty' => 5,
             ],
-            [
-                'product_id' => 1,
-                'size' => 'S',
-                'qty' => 0,
-            ],
-            [
-                'product_id' => 1,
-                'size' => 'S',
-                'qty' => 0,
-            ],
         ]);
 
     }

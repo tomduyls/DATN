@@ -81,7 +81,7 @@
 
                                     <div class="position-relative row form-group mb-1">
                                         <div class="col-md-9 col-xl-8 offset-md-3">
-                                            <a href="#" class="btn-shadow btn-hover-shine btn btn-primary">
+                                            <a href="/admin/product/{{ $product->id }}" class="btn-shadow btn-hover-shine btn btn-primary">
                                                 <span class="btn-icon-wrapper pr-2 opacity-8">
                                                     <i class="fa fa-check fa-w-20"></i>
                                                 </span>

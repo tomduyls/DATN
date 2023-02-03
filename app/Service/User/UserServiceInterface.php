@@ -6,5 +6,5 @@ use App\Service\ServiceInterface;
 
 interface UserServiceInterface extends ServiceInterface
 {
-
+    public function getUserByEmail($email);
 }

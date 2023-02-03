@@ -347,6 +347,8 @@ function removeCart(rowId) {
             var cart_existItem = cart_tbody.find("tr" + "[data-rowId='" + rowId + "']");
             cart_existItem.remove();
 
+            $('.subtotal span').text('$' + response['subtotal']);
+            $('.cart-total span').text('$' + response['total']);
 
             alert('Delete successful!\nProduct: ' + response['cart'].name);
             console.log(response);
@@ -365,8 +367,8 @@ function destroyCart() {
         data: {},
         success: function (response) {
             $('.cart-count').text(0);
-            $('.cart-price').text(0);
-            $('.select-total h5').text(0);
+            $('.cart-price').text('$0.00');
+            $('.select-total h5').text('$0.00');
 
             var cartHover_tbody = $('.select-items tbody');
             cartHover_tbody.children().remove();
@@ -374,8 +376,8 @@ function destroyCart() {
             var cart_tbody = $('.cart-table tbody');
             cart_tbody.children().remove();
 
-            $('.subtotal span').text('0');
-            $('.cart-total span').text('0');
+            $('.subtotal span').text('$0.00');
+            $('.cart-total span').text('$0.00');
 
             alert('Delete successful!\nProduct: ' + response['cart'].name);
             console.log(response);
@@ -394,8 +396,8 @@ function updateCart(rowId, qty) {
         data: {rowId: rowId, qty: qty},
         success: function (response) {
             $('.cart-count').text(response['count']);
-            $('.cart-price').text(response['total']);
-            $('.select-total h5').text(response['subtotal']);
+            $('.cart-price').text('$' + response['total']);
+            $('.select-total h5').text('$' + response['subtotal']);
 
             var cartHover_tbody = $('.select-items tbody');
             var cartHover_existItem = cartHover_tbody.find("tr" + "[data-rowId='" + rowId + "']");
@@ -417,7 +419,7 @@ function updateCart(rowId, qty) {
             $('.subtotal span').text('$' + response['subtotal']);
             $('.cart-total span').text('$' + response['total']);
 
-            alert('Update successful!\nProduct: ' + response['cart'].name);
+            // alert('Update successful!\nProduct: ' + response['cart'].name);
             console.log(response);
         },
         error: function (response) {

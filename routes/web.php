@@ -56,7 +56,11 @@ Route::prefix('account')->group(function() {
     Route::get('/logout', [AccountController::class, 'logout']);
     Route::get('/register', [AccountController::class, 'register']);
     Route::post('/register', [AccountController::class, 'postRegister']);
-    
+    Route::get('/forgot-password', [AccountController::class, 'forgotPass']);
+    Route::post('/forgot-password', [AccountController::class, 'postForgotPass']);
+    Route::get('/reset-password/{id}/{token}', [AccountController::class, 'resetPass'])->name('account.resetPass');
+    Route::post('/reset-password/{id}/{token}', [AccountController::class, 'postResetPass']);
+
     Route::prefix('my-order')->middleware('CheckMemberLogin')->group(function() {
         Route::get('/', [AccountController::class, 'myOrderIndex']);
         Route::get('/{id}', [AccountController::class, 'myOrderShow']);

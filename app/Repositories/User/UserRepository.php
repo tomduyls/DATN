@@ -11,4 +11,11 @@ class UserRepository extends BaseRepositories implements UserRepositoryInterface
     {
         return User::class;
     }
+
+    public function getUserByEmail($email)
+    {
+        return $this->model
+                ->where('email', $email)
+                ->get();
+    }
 }

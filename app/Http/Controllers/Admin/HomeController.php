@@ -11,6 +11,9 @@ class HomeController extends Controller
 {
     public function getLogin()
     {
+        if(Auth::id())
+            return redirect()->intended('admin');
+        else
         return view('admin.login');
     }
 
