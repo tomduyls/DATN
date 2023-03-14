@@ -48,6 +48,8 @@ Route::prefix('checkout')->group(function() {
     Route::get('/', [CheckOutController::class, 'index']);
     Route::post('/', [CheckOutController::class, 'addOrder']);
     Route::get('/result', [CheckOutController::class, 'result']);
+    Route::get('/vnPayCheck', [CheckOutController::class, 'vnPayCheck']);
+
 });
 
 Route::prefix('account')->group(function() {

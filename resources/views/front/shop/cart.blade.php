@@ -21,7 +21,7 @@
     <!-- Shopping Cart Section Begin -->
     <div class="shopping-cart spad">
         <div class="container">
-            <div class="row">
+            <div class="row"> 
                 @if (Cart::count() > 0)
                     <div class="col-lg-12">
                         <div class="cart-table">

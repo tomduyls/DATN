@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Service\Product\ProductServiceInterface;
 use App\Service\User\UserServiceInterface;
 use App\Utilities\Constant;
+use App\Utilities\VNPay;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,19 @@ class CheckOutController extends Controller
 
     public function addOrder(Request $request)
     {
+        //Revalidate so luong hang
+        $carts = Cart::content();
+        foreach($carts as $cart){
+            $productDetail = ProductDetail::where('product_id', $cart->id)->where('size', $cart->options->size)->get();
+            $qty_check = $productDetail[0]->qty;
+            
+            if($cart->qty > $qty_check){
+                $message = $cart->name . " " . $cart->options->size . " only has " . $productDetail[0]->qty .  " available, please check your Cart to change!";
+                return redirect('checkout/result')->with('notification', $message); 
+            }
+        }
+
+        //Validate du lieu
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -83,7 +97,7 @@ class CheckOutController extends Controller
             
         }
 
-        //01. Them don hang
+        //Them don hang
         $data = $request->all();
         
         if(Auth::guest()) 
@@ -92,7 +106,7 @@ class CheckOutController extends Controller
         $data['status'] = Constant::order_status_ReceiveOrders;
         $order = $this->orderService->create($data);
 
-        //02. Them chi tiet don hang
+        //Them chi tiet don hang
         $carts = Cart::content();
         foreach ($carts as $cart) {
             $data = [
@@ -108,23 +122,70 @@ class CheckOutController extends Controller
             $this->updateQty($cart);
         };
 
-        //Gui email
-        $total = Cart::total();
-        $subtotal = Cart::subtotal();
+        if($request->payment_type == 'pay_later') {
+            //Gui email
+            $total = Cart::total();
+            $subtotal = Cart::subtotal();
 
-        $this->sendEmail($order, $total, $subtotal);
+            $this->sendEmail($order, $total, $subtotal);
 
-        //03. Xoa don hang
-        Cart::destroy();
+            //Xoa don hang
+            Cart::destroy();
 
-        //04.Tra ket qua thong bao
-        return redirect('checkout/result')->with('notification', "Success! You will pay on delivery. Please check your email.");
+            //Tra ket qua thong bao
+            return redirect('checkout/result')->with('notification', "Success! You will pay on delivery. Please check your email.");
+        }
+        
+        if($request->payment_type == 'online_payment') {
+            //Lay URL thanh toan VNPay
+            $data_url = VNPay::vnpay_create_payment([
+                'vnp_TxnRef' => $order->id, //id don hang
+                'vnp_OrderInfo' => 'Mo ta', //mo ta don hang
+                'vnp_Amount' => Cart::total(0, '', '') * 24000, //tong gia don hang
+            ]);
+            //Chuyen huong toi URL lay duoc
+        }   return redirect()->to($data_url);
     }
 
     public function result()
     {
         $notification = session('notification');
         return view('front.checkout.result', compact('notification'));
+    }
+
+    public function vnPayCheck(Request $request)
+    {
+        //Lay data tu URL (do VNPay gui ve qua $vnp_Returnurl)
+        $vnp_ResponseCode = $request->get('vnp_ResponseCode'); //Ma phan hoi ket qua thanh toan. 00 = Thanh cong
+        $vnp_TxnRef = $request->get('vnp_TxnRef'); //order_id
+        $vnp_Amount = $request->get('vnp_Amount'); //Tong tien thanh toan
+
+        //Kiem tra data, xem ket qua giao dich ve tu VNPay hop le khong
+        if($vnp_ResponseCode != null) {
+            //Neu thanh cong
+            if($vnp_ResponseCode == 00) {
+                //Gui email
+                $order = $this->orderService->find($vnp_TxnRef);
+                $total = Cart::total();
+                $subtotal = Cart::subtotal();
+
+                $this->sendEmail($order, $total, $subtotal);
+
+                //Xoa gio hang
+                Cart::destroy();
+
+                //Thong bao ket qua
+                return redirect('checkout/result')->with('notification', "Success! Has paid online. Please check your email.");
+            }
+            //Neu khong thanh cong
+            else {
+                //Xoa don hang da them vao DB
+                $this->orderService->delete($vnp_TxnRef);
+
+                //Thong bao loi
+                return redirect('checkout/result')->with('notification', "ERROR: Payment failed or canceled");
+            }
+        }
     }
 
     public function updateQty($cart)

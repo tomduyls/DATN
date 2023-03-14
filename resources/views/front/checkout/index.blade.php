@@ -22,14 +22,17 @@
     <!-- Shopping Cart Section Begin -->
     <div class="checkout-section spad">
         <div class="container">
+            
             <form action="" method="POST" class="checkout-form">
                 @csrf
                 <div class="row">
                     @if (Cart::count() > 0)
                         <div class="col-lg-6">
-                            <div class="checkout-content">
-                                <a href="/account/login" class="content-btn">Click Here To Login</a>
-                            </div>
+                            @if (!Auth::check())
+                                <div class="checkout-content">
+                                    <a href="./account/login" class="content-btn">Click Here To Login</a>
+                                </div>
+                            @endif
                             <h4>Billing Details</h4>
                             <div class="row">
 
@@ -83,7 +86,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <label for="email">Email Address <span>*</span></label>
-                                    <input {{ Auth::check() ? 'disabled' : '' }} type="text" id="email" name="email" value="{{ Auth::user()->email ?? old('email')}}">
+                                    <input {{ Auth::check() ?  'readonly' : '' }} type="text" id="email" name="email" value="{{ Auth::user()->email ?? old('email')}}">
                                     @error('email')
                                         <span style="color:red;"> {{$message}}</span>
                                     @enderror
@@ -107,9 +110,9 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <div class="checkout-content">
+                            {{-- <div class="checkout-content">
                                 <input type="text" placeholder="Enter Your Coupon Code">
-                            </div>
+                            </div> --}}
                             <div class="place-order">
                                 <h4>Your Order</h4>
                                 <div class="order-total">

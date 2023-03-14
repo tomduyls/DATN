@@ -175,7 +175,7 @@
                                     <li><a href="./checkout">Checkout</a></li>
                                     <li><a href="faq.html">Faq</a></li>
                                     @if (!Auth::user())
-                                        <li><a href="register.html">Register</a></li>
+                                        <li><a href="./account/register">Register</a></li>
                                         <li><a href="./account/login">Login</a></li>
                                     @endif
                                 </ul>

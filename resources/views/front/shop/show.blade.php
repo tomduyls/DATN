@@ -81,6 +81,7 @@
                                             <input type="number" name="qty" value="1" min="1" max="5">
                                         </div>
                                             <button type="submit" class="primary-btn pd-cart" >Add To Cart</button> 
+                                        @else <h3>Out of Stock</h3>
                                         @endif 
                                     
                                 </form>
