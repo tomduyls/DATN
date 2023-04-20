@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', 'Product Detail')
+@section('title', 'Product')
 
 @section('body')
                 <!-- Main -->
@@ -21,6 +21,31 @@
                             </div>
                         </div>
                     </div>
+
+                    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav">
+                        <li class="nav-item">
+                            <a href="/admin/product/{{ $product->id }}/edit" class="nav-link">
+                                <span class="btn-icon-wrapper pr-2 opacity-8">
+                                    <i class="fa fa-edit fa-w-20"></i>
+                                </span>
+                                <span>Edit</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item delete">
+                            <form action="/admin/product/{{ $product->id }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="nav-link btn" type="submit"
+                                    onclick="return confirm('Do you really want to delete this item?')">
+                                    <span class="btn-icon-wrapper pr-2 opacity-8">
+                                        <i class="fa fa-trash fa-w-20"></i>
+                                    </span>
+                                    <span>Delete</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -55,6 +80,14 @@
                                             class="col-md-3 text-md-right col-form-label">Product Details</label>
                                         <div class="col-md-9 col-xl-8">
                                             <p><a href="/admin/product/{{ $product->id}}/detail">Manage details</a></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="position-relative row form-group">
+                                        <label for="brand_id"
+                                            class="col-md-3 text-md-right col-form-label">Product Comments</label>
+                                        <div class="col-md-9 col-xl-8">
+                                            <p><a href="/admin/product/{{ $product->id}}/comment">Manage comments</a></p>
                                         </div>
                                     </div>
 

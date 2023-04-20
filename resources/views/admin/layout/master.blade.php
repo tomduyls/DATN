@@ -632,6 +632,11 @@
                                 </a>
                                 <ul>
                                     <li>
+                                        <a href="/admin/dashboard" class="{{ (request()->segment(2) == 'dashboard') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Dashboard
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="/admin/user" class="{{ (request()->segment(2) == 'user') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>User
                                         </a>
@@ -654,6 +659,16 @@
                                     <li>
                                         <a href="/admin/brand" class="{{ (request()->segment(2) == 'brand') ? 'mm-active' : '' }}">
                                             <i class="metismenu-icon"></i>Brand
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/blog" class="{{ (request()->segment(2) == 'blog') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Blog
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/coupon" class="{{ (request()->segment(2) == 'coupon') ? 'mm-active' : '' }}">
+                                            <i class="metismenu-icon"></i>Coupon
                                         </a>
                                     </li>
                                 </ul>

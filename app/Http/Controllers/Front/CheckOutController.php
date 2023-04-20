@@ -6,11 +6,13 @@ namespace App\Http\Controllers\Front;
 use App\Service\Order\OrderServiceInterface;
 use App\Service\OrderDetail\OrderDetailServiceInterface;
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\ProductDetail;
 use App\Models\User;
 use App\Service\Product\ProductServiceInterface;
 use App\Service\User\UserServiceInterface;
+use App\Utilities\Common;
 use App\Utilities\Constant;
 use App\Utilities\VNPay;
 use Illuminate\Http\Request;
@@ -41,14 +43,16 @@ class CheckOutController extends Controller
     {
         $carts = Cart::content();
         $total = Cart::total();
-        $subtotal = Cart::subtotal();
-        return view('front.checkout.index', compact('carts', 'total', 'subtotal'));
+        $percentageDiscount = Common::percentageDiscount();
+        $fixedDiscount = Cart::tax();
+        return view('front.checkout.index', compact('carts', 'total', 'percentageDiscount', 'fixedDiscount'));
     }
 
     public function addOrder(Request $request)
     {
         //Revalidate so luong hang
         $carts = Cart::content();
+        
         foreach($carts as $cart){
             $productDetail = ProductDetail::where('product_id', $cart->id)->where('size', $cart->options->size)->get();
             $qty_check = $productDetail[0]->qty;
@@ -58,7 +62,7 @@ class CheckOutController extends Controller
                 return redirect('checkout/result')->with('notification', $message); 
             }
         }
-
+        
         //Validate du lieu
         $request->validate([
             'first_name' => 'required',
@@ -107,27 +111,45 @@ class CheckOutController extends Controller
         $order = $this->orderService->create($data);
 
         //Them chi tiet don hang
-        $carts = Cart::content();
+        $cart_key = $carts->keys();
+        $cart_first_item = Cart::get($cart_key[0]);
+        $coupon = Coupon::where('code', $cart_first_item->options->coupon)->get();
+        $coupon_id = 0;
+
+        if($coupon->count() > 0) 
+            $coupon_id = $coupon[0]->id;
+
         foreach ($carts as $cart) {
+            
             $data = [
                 'order_id' => $order->id,
                 'product_id' => $cart->id,
+                'coupon_id' => $coupon_id,
                 'qty' => $cart->qty,
                 'size' => $cart->options->size,
                 'amount' => $cart->price,
                 'total' => $cart->qty * $cart->price,
             ];
+            
+            if($coupon_id == 0) unset($data['coupon_id']);
+
             $this->orderDetailService->create($data);
 
             $this->updateQty($cart);
         };
 
+        //Update coupon
+        if($coupon->count() > 0) 
+            $this->updateCoupon($cart_first_item->options->coupon);
+
         if($request->payment_type == 'pay_later') {
             //Gui email
+            $price_total = Cart::priceTotal();
             $total = Cart::total();
-            $subtotal = Cart::subtotal();
+            $percentageDiscount = Common::percentageDiscount();
+            $fixedDiscount = Cart::tax();
 
-            $this->sendEmail($order, $total, $subtotal);
+            $this->sendEmail($order, $total, $price_total, $percentageDiscount, $fixedDiscount);
 
             //Xoa don hang
             Cart::destroy();
@@ -166,10 +188,12 @@ class CheckOutController extends Controller
             if($vnp_ResponseCode == 00) {
                 //Gui email
                 $order = $this->orderService->find($vnp_TxnRef);
+                $price_total = Cart::priceTotal();
                 $total = Cart::total();
-                $subtotal = Cart::subtotal();
+                $percentageDiscount = Common::percentageDiscount();
+                $fixedDiscount = Cart::tax();
 
-                $this->sendEmail($order, $total, $subtotal);
+                $this->sendEmail($order, $total, $price_total, $percentageDiscount, $fixedDiscount);
 
                 //Xoa gio hang
                 Cart::destroy();
@@ -200,12 +224,20 @@ class CheckOutController extends Controller
         $this->productService->update(['qty' => $productQty], $cart->id);
     }
 
-    private function sendEmail($order, $total, $subtotal) 
+    public function updateCoupon($coupon_code)
+    {
+        $coupon = Coupon::where('code', $coupon_code)->get();
+        $coupon_amount = $coupon[0]->amount - 1;
+
+        Coupon::where('code', $coupon_code)->update(['amount' => $coupon_amount]);
+    }
+
+    private function sendEmail($order, $total, $price_total, $percentageDiscount, $fixedDiscount) 
     {
         $email_to = $order->email;
 
         Mail::send('front.checkout.orderEmail',
-                compact('order', 'total', 'subtotal'),
+                compact('order', 'total', 'price_total', 'percentageDiscount', 'fixedDiscount'),
                 function ($message) use ($email_to) {
                     $message->from('codelean@gmail.com', "CodeLean eShop");
                     $message->to($email_to, $email_to);

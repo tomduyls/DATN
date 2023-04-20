@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', 'Edit User')
+@section('title', 'User')
 
 @section('body')
                 <!-- Main -->
@@ -65,7 +65,8 @@
                                                     class="form-control" value="{{ $user->email }}">
                                             </div>
                                             @error('email')
-                                                <span style="color:red;"> {{$message}}</span>
+                                                <div class="col-md-3 text-md-right col-form-label"></div>
+                                                <div class="col-md-9 col-xl-8" style="color:red;"> {{$message}}</div>
                                             @enderror
                                         </div>
 
@@ -85,6 +86,10 @@
                                                 <input name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" type="password"
                                                     class="form-control" value="">
                                             </div>
+                                            @error('password_confirmation')
+                                                <div class="col-md-3 text-md-right col-form-label"></div>
+                                                <div class="col-md-9 col-xl-8" style="color:red;"> {{$message}}</div>
+                                            @enderror
                                         </div>
 
                                         <div class="position-relative row form-group">

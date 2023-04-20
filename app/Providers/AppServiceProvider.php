@@ -22,6 +22,16 @@ use App\Repositories\Blog\BlogRepositoryInterface;
 use App\Service\Blog\BlogServiceInterface;
 use App\Service\Blog\BlogService;
 
+use App\Repositories\BlogComment\BlogCommentRepository;
+use App\Repositories\BlogComment\BlogCommentRepositoryInterface;
+use App\Service\BlogComment\BlogCommentServiceInterface;
+use App\Service\BlogComment\BlogCommentService;
+
+use App\Repositories\Coupon\CouponRepository;
+use App\Repositories\Coupon\CouponRepositoryInterface;
+use App\Service\Coupon\CouponServiceInterface;
+use App\Service\Coupon\CouponService;
+
 use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Service\Brand\BrandServiceInterface;
@@ -95,6 +105,28 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(
             BlogServiceInterface::class,
             BlogService::class
+        );
+
+        //BlogComment
+        $this->app->singleton(
+            BlogCommentRepositoryInterface::class,
+            BlogCommentRepository::class
+        );
+
+        $this->app->singleton(
+            BlogCommentServiceInterface::class,
+            BlogCommentService::class
+        );
+
+        //Coupon
+        $this->app->singleton(
+            CouponRepositoryInterface::class,
+            CouponRepository::class
+        );
+
+        $this->app->singleton(
+            CouponServiceInterface::class,
+            CouponService::class
         );
 
         //Brand

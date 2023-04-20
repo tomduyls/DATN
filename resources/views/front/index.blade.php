@@ -14,7 +14,7 @@
                             <span>Bag,kids</span>
                             <h1>Black friday</h1>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
-                            <a href="#" class="primary-btn">Shop Now</a>
+                            <a href="./shop" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
                     <div class="off-card">
@@ -29,7 +29,7 @@
                             <span>Bag,kids</span>
                             <h1>Black friday</h1>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore</p>
-                            <a href="#" class="primary-btn">Shop Now</a>
+                            <a href="./shop" class="primary-btn">Shop Now</a>
                         </div>
                     </div>
                     <div class="off-card">
@@ -49,7 +49,7 @@
                     <div class="single-banner">
                         <img src="front/img/banner-1.jpg" alt="">
                         <div class="inner-text">
-                            <h4>Men's</h4>
+                            <a href="./shop/category/Men"><h4>Men's</h4></a>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     <div class="single-banner">
                         <img src="front/img/banner-2.jpg" alt="">
                         <div class="inner-text">
-                            <h4>Women's</h4>
+                            <a href="./shop/category/Women"><h4>Women's</h4></a>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                     <div class="single-banner">
                         <img src="front/img/banner-3.jpg" alt="">
                         <div class="inner-text">
-                            <h4>Kid's</h4>
+                            <a href="./shop/category/Kids"><h4>Kid's</h4></a>
                         </div>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                 <div class="col-lg-3">
                     <div class="product-large set-bg" data-setbg="front/img/products/women-large.jpg">
                         <h2>Women's</h2>
-                        <a href="#">Discover More</a>
+                        <a href="./shop/category/Women">Discover More</a>
                     </div>
                 </div>
                 <div class="col-lg-8 offset-lg-1">
@@ -106,7 +106,7 @@
     <!-- Women Banner Section End -->
 
     <!-- Deal Of The Week Section Begin -->
-    <section class="deal-of-week set-bg spad" data-setbg="front/img/time-bg.jpg">
+    {{-- <section class="deal-of-week set-bg spad" data-setbg="front/img/time-bg.jpg">
         <div class="container">
             <div class="col-lg-6 text-center">
                 <div class="section-title">
@@ -138,7 +138,7 @@
                 <a href="" class="primary-btn">Shop Now</a>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Deal Of The Week Section End -->
 
     <!-- Man Banner Section Begin -->
@@ -164,7 +164,7 @@
                 <div class="col-lg-3 offset-lg-1">
                     <div class="product-large set-bg" data-setbg="front/img/products/man-large.jpg">
                         <h2>Men's</h2>
-                        <a href="#">Discover More</a>
+                        <a href="./shop/category/Men">Discover More</a>
                     </div>
                 </div>  
             </div>
@@ -224,21 +224,21 @@
                 </div>
             </div>
             <div class="row">
-                @foreach ($blogs as $item)
+                @foreach ($blogs as $blog)
                     <div class="col-lg-4 col-md-6">
                         <div class="single-latest-blog">
-                            <img src="front/img/blog/{{ $item->image }}" alt="">
+                            <img src="front/img/blog/{{ $blog->image }}" alt="">
                             <div class="latest-text">
                                 <div class="tag-list">
                                     <div class="tag-item">
                                         <i class="fa fa-calendar-o"></i>
-                                        {{ date('M d, Y', strtotime($item->create_at)) }}
+                                        {{ date('M d, Y', strtotime($blog->create_at)) }}
                                     </div>
                                 </div>
-                                <a href="">
-                                    <h4>{{ $item->title }}</h4>
+                                <a href="./blog/{{ $blog->id }}">
+                                    <h4>{{ $blog->title }}</h4>
                                 </a>
-                                <p>{{ $item->title }}</p>
+                                <p>{{ $blog->title }}</p>
                             </div>
                         </div>
                     </div>
@@ -272,8 +272,7 @@
                         <div class="single-benefit">
                             <div class="sb-icon">
                                 <img src="front/img/icon-3.png" alt="">
-                            </di
-                            v>
+                            </div>
                             <div class="sb-text">
                                 <h6>Secure payment</h6>
                                 <p>100% secure payment</p>

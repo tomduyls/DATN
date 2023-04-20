@@ -46,7 +46,6 @@ class ProductRepository extends BaseRepositories implements ProductRepositoryInt
     public function getProductByCategory($categoryName, $request)
     {
         $products = ProductCategory::where('name', $categoryName)->first()->products->toQuery();
-
         $products = $this->filter($products, $request);
 
         $products = $this->sortAndPagination($products, $request);

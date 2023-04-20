@@ -9,7 +9,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="index.html"><i class="fa fa-home"> Home</i></a>
+                        <a href="./"><i class="fa fa-home"></i> Home</a>
+                        <a href="./my-order"><i class="fa fa-home"></i>My Order</a>
                         <span>Order Detail</span>
                     </div>
                 </div>
@@ -85,10 +86,25 @@
                                             <span>${{ $orderDetail->total }}</span>
                                         </li>
                                     @endforeach
-                                    
+                                    <li class="fw-normal">Discount <span>@if ($order->coupon_type == "fixed")
+                                                                            ${{ $order->coupon_value }}
+                                                                        @elseif ($order->coupon_type == "percentage")
+                                                                            {{ $order->coupon_value }}%
+                                                                        @else
+                                                                        @endif
+                                                                    </span>
+                                    </li>
                                     <li class="total-price">
                                         Total 
-                                        <span>${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) }}</span>
+                                        <span>
+                                            @if ($order->coupon_type == "fixed")
+                                                ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) - $order->coupon_value }}
+                                            @elseif ($order->coupon_type == "percentage")
+                                                ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) * $order->coupon_value/100 }}
+                                            @else
+                                                ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) }}
+                                            @endif
+                                    </span>
                                     </li>
                                 </ul>
                                 <div class="payment-check">

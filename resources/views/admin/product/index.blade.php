@@ -101,7 +101,6 @@
                                                                 False
                                                             </div>
                                                         @endif
-                                                        
                                                     </td>
                                                     <td class="text-center">
                                                         <a href="/admin/product/{{ $product->id }}"

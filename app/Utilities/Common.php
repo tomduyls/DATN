@@ -4,6 +4,7 @@ namespace App\Utilities;
 
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class Common
 {
@@ -19,5 +20,21 @@ class Common
         $file->move($path, $file_name);
 
         return $file_name;
+    }
+
+    public static function percentageDiscount()
+    {
+        $discount = str_replace( ',', '', Cart::discount());
+        $price_total = str_replace( ',', '', Cart::priceTotal());
+        $percentage_discount = 0;
+        
+        if($price_total > 0) $percentage_discount = $discount/$price_total * 100;
+
+        return $percentage_discount;
+    }
+
+    public static function getFisrtCartItem()
+    {
+        
     }
 }

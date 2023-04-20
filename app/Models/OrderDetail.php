@@ -22,4 +22,9 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class, 'coupon_id', 'id');
+    }
 }

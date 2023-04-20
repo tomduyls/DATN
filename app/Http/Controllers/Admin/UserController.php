@@ -102,19 +102,16 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'email' => 'unique:users,email,'.$user->id
+            'email' => 'unique:users,email,'.$user->id,
+            'password_confirmation' => 'same:password'
         ]);
         $data = $request->all();
 
         //Xu ly mat khau
-        if ($request->get('password') != null) {
-            if($request->get('password') != $request->get('password_confirmation')) {
-                return back()->with('notification', 'Error: Confirm password does not match');
-            }
+        if ($request->get('password') != null)
             $data['password'] = bcrypt($request->get('password'));
-        } else {
+        else
             unset($data['password']);
-        }
 
         //Xu ly file anh
         if ($request->hasFile('image')) {

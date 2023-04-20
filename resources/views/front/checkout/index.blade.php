@@ -9,8 +9,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="index.html"><i class="fa fa-home"> Home</i></a>
-                        <a href="shop.html">Shop</a>
+                        <a href="./"><i class="fa fa-home"></i> Home</a>
+                        <a href="./cart">Shopping Cart</a>
                         <span>Check Out</span>
                     </div>
                 </div>
@@ -121,7 +121,13 @@
                                         @foreach ($carts as $cart)
                                             <li class="fw-normal">{{ $cart->name }} {{ $cart->options->size }} x {{ $cart->qty }} <span>${{ $cart->price * $cart->qty }} </span></li>
                                         @endforeach
-                                        <li class="fw-normal">Subtotal <span>${{ $subtotal }}</span></li>
+                                        <li class="fw-normal">Discount <span>@if ($fixedDiscount > 0)
+                                                                                {{ "$".$fixedDiscount }}
+                                                                            @elseif ($percentageDiscount > 0)
+                                                                                {{ $percentageDiscount."%" }}
+                                                                            @else 
+                                                                            @endif
+                                                                        </span></li>
                                         <li class="total-price">Total <span>${{ $total }}</span></li>
                                     </ul>
                                     <div class="payment-check">

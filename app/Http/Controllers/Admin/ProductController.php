@@ -102,6 +102,9 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        if($request->featured == null)
+            $data += ['featured' => 0];
+
         $this->productService->update($data, $id);
 
         return redirect('/admin/product/' . $id);

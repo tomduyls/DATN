@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="index.html"><i class="fa fa-home"> Home</i></a>
+                        <a href="./"><i class="fa fa-home"></i> Home</a>
                         <span>Shopping Cart</span>
                     </div>
                 </div>
@@ -57,6 +57,7 @@
                                             <td class="close-td first-row">
                                                 <i onclick="removeCart('{{ $cart->rowId }}')" class="ti-close"></i>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -65,21 +66,34 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="cart-buttons">
-                                    <a href="#" class="primary-btn countinue-shop">Continue shopping</a>
-                                    <a href="#" class="primary-btn up-cart">Update cart</a>
+                                    <a href="./shop" class="primary-btn countinue-shop">Continue shopping</a>
+                                    
                                 </div>
                                 <div class="discount-coupon">
                                     <h6>Discount Codes</h6>
                                     <form action="#" class="coupon-form">
-                                        <input type="text" placeholder="Enter your codes">
-                                        <button type="submit" class="site-btn coupon-btn">Apply</button>
+                                        @csrf
+                                        <input type="text" name="code" class="code" placeholder="Enter your codes">
+                                        <input type="hidden" name="rowId" class="rowId" value="{{ $cart_key[0] }}">
+                                        <button type="button" class="site-btn coupon-btn get-coupon">Apply</button>
                                     </form>
+                                    <div class="notify-comment"></div>
+                                    @if (Cart::tax() > 0 || Cart::discount() > 0)
+                                        <span onclick="removeCoupon('{{ $cart_key[0] }}')" class="primary-btn up-cart">Remove discount</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-lg-4 offset-lg-4">
                                 <div class="proceed-checkout">
                                     <ul>
-                                        <li class="subtotal">Subtotal <span>${{ $subtotal }}</span></li>
+                                        <li class="cart-element price-total">Price Total <span>${{ $priceTotal }}</span></li>
+                                        <li class="cart-element discount">Discount <span>@if ($fixedDiscount > 0)
+                                                                                            {{ "$".$fixedDiscount }}
+                                                                                        @elseif ($percentageDiscount > 0)
+                                                                                            {{ $percentageDiscount."%" }}
+                                                                                        @else 
+                                                                                        @endif
+                                                                                    </span></li>
                                         <li class="cart-total">Total <span>${{ $total }}</span></li>
                                     </ul>
                                     <a href="./checkout" class="proceed-btn">PROCEED TO CHECK OUT</a>

@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\CheckAdminLogin;
+use App\Http\Middleware\CheckOrderStatus;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -67,5 +68,6 @@ class Kernel extends HttpKernel
 
         'CheckMemberLogin' => \App\Http\Middleware\CheckMemberLogin::class,
         'CheckAdminLogin' => CheckAdminLogin::class,
+        'CheckOrderStatus' => CheckOrderStatus::class,
     ];
 }

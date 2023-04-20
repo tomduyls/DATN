@@ -257,6 +257,23 @@
 	});
     
     /*-------------------
+		Size change
+	--------------------- */
+    $('#showForm input').on('change', function() {
+        var proSize = $('input[name=size]:checked', '#showForm').val();
+        // console.log(proSize);
+        for (var size in sizeArray) {
+            if(size == proSize) {
+                console.log(sizeArray[size]);
+                $('.quantity-per-size').text(sizeArray[size] + ' pieces available');
+                $('#qty-per-size').attr({
+                    'max' : sizeArray[size]
+                });
+            }     
+        }
+      });
+
+    /*-------------------
 		Loc sp home webpage
 	--------------------- */
     const product_men = $(".product-slider.men");
@@ -282,7 +299,6 @@
     /*-------------------
 		Qty theo size
 	--------------------- */
-    
 })(jQuery);
 
 function addCart(productId) {
@@ -292,8 +308,8 @@ function addCart(productId) {
         data: {productId: productId},
         success: function (response) {
             $('.cart-count').text(response['count']);
-            $('.cart-price').text('$' + response['total']);
-            $('.select-total h5').text('$' + response['total']);
+            $('.cart-price').text('$' + response['price-total']);
+            $('.select-total h5').text('$' + response['price-total']);
 
             var cartHover_tbody = $('.select-items tbody');
             var cartHover_existItem = cartHover_tbody.find("tr" + "[data-rowId='" + response['cart'].rowId + "']");
@@ -335,8 +351,8 @@ function removeCart(rowId) {
         data: {rowId: rowId},
         success: function (response) {
             $('.cart-count').text(response['count']);
-            $('.cart-price').text('$' + response['total']);
-            $('.select-total h5').text('$' + response['total']);
+            $('.cart-price').text('$' + response['price-total']);
+            $('.select-total h5').text('$' + response['price-total']);
 
             var cartHover_tbody = $('.select-items tbody');
             var cartHover_existItem = cartHover_tbody.find("tr" + "[data-rowId='" + rowId + "']");
@@ -347,7 +363,7 @@ function removeCart(rowId) {
             var cart_existItem = cart_tbody.find("tr" + "[data-rowId='" + rowId + "']");
             cart_existItem.remove();
 
-            $('.subtotal span').text('$' + response['subtotal']);
+            $('.price-total span').text('$' + response['price-total']);
             $('.cart-total span').text('$' + response['total']);
 
             alert('Delete successful!\nProduct: ' + response['cart'].name);
@@ -376,7 +392,7 @@ function destroyCart() {
             var cart_tbody = $('.cart-table tbody');
             cart_tbody.children().remove();
 
-            $('.subtotal span').text('$0.00');
+            $('.price-total span').text('$0.00');
             $('.cart-total span').text('$0.00');
 
             alert('Delete successful!\nProduct: ' + response['cart'].name);
@@ -396,8 +412,8 @@ function updateCart(rowId, qty) {
         data: {rowId: rowId, qty: qty},
         success: function (response) {
             $('.cart-count').text(response['count']);
-            $('.cart-price').text('$' + response['total']);
-            $('.select-total h5').text('$' + response['subtotal']);
+            $('.cart-price').text('$' + response['price-total']);
+            $('.select-total h5').text('$' + response['price-total']);
 
             var cartHover_tbody = $('.select-items tbody');
             var cartHover_existItem = cartHover_tbody.find("tr" + "[data-rowId='" + rowId + "']");
@@ -416,7 +432,7 @@ function updateCart(rowId, qty) {
                 cart_existItem.find('.total-price').text('$' + (response['cart'].price * response['cart'].qty).toFixed(2));
             }
 
-            $('.subtotal span').text('$' + response['subtotal']);
+            $('.price-total span').text('$' + response['price-total']);
             $('.cart-total span').text('$' + response['total']);
 
             // alert('Update successful!\nProduct: ' + response['cart'].name);
@@ -425,6 +441,198 @@ function updateCart(rowId, qty) {
         error: function (response) {
             alert('Update failed.');
             console.log(response);
+        },
+    });
+}
+
+//Ajax blog comment
+$(document).ready(function() {
+    loadBlogComment();
+    function loadBlogComment() {
+        var blog_id = $('.blog_id').val();
+        var _token = $('input[name="_token"]').val();
+
+        $.ajax({
+            method: "GET",
+            url: "blog/" + blog_id + "/load-comment",
+            data: {blog_id: blog_id, _token: _token},
+            success: function (response) {
+                $('.posted-by').html(response);
+            }
+        });
+    }
+
+    $('.post-blog-comment').click(function() {
+        var blog_id = $('.blog_id').val();
+        var name = $('.name').val();
+        var email = $('.email').val();
+        var messages = $('.messages').val();
+        var user_id = $('.user_id').val();
+        var _token = $('input[name="_token"]').val();
+    
+        $.ajax({
+            method: "POST",
+            url: "blog/" + blog_id + "/post-comment",
+            data: {
+                blog_id: blog_id,
+                name: name,
+                email: email,
+                messages: messages,
+                checked: 0,
+                user_id: user_id,
+                _token: _token,
+            },
+            success: function (response) {
+                $('.notify-comment').html('<p class="text text-success">Send comment successed!</p>');
+                loadBlogComment();
+                $('.name').val('');
+                $('.email').val('');
+                $('.messages').val('');
+            },
+            error: function (response) {
+                $('.notify-comment').html('<p class="text text-danger">Send comment failed!</p>');
+            }
+        });
+    });
+});
+
+//Ajax product comment
+$(document).ready(function() {
+    loadProductComment();
+    function loadProductComment() {
+        var product_id = $('.product_id').val();
+        var _token = $('input[name="_token"]').val();
+
+        $.ajax({
+            method: "GET",
+            url: "shop/product/" + product_id + "/load-comment",
+            data: {product_id: product_id, _token: _token},
+            success: function (response) {
+                $('.comment-option').html(response);
+            }
+        });
+    }
+
+    $('.post-product-comment').click(function() {
+        var product_id = $('.product_id').val();
+        var name = $('.name').val();
+        var email = $('.email').val();
+        var messages = $('.messages').val();
+        var rating = $(".rating:checked").val();
+        var user_id = $('.user_id').val();
+        var _token = $('input[name="_token"]').val();
+    
+        $.ajax({
+            method: "POST",
+            url: "shop/product/" + product_id + "/post-comment",
+            data: {
+                product_id: product_id,
+                name: name,
+                email: email,
+                messages: messages,
+                rating: rating,
+                checked: 0,
+                user_id: user_id,
+                _token: _token,
+            },
+            success: function (response) {
+                $('.notify-comment').html('<p class="text text-success">Send comment successed!</p>');
+                loadProductComment();
+                $('.name').val('');
+                $('.email').val('');
+                $('.messages').val('');
+            },
+            error: function (response) {
+                $('.notify-comment').html('<p class="text text-danger">Send comment failed!</p>');
+            }
+        });
+    });
+});
+
+// = = = = = = = = = = = = = = = = changeImg = = = = = = = = = = = = = = = =
+function changeImg(input) {
+    //Nếu như tồn thuộc tính file, đồng nghĩa người dùng đã chọn file mới
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        //Sự kiện file đã được load vào website
+        reader.onload = function (e) {
+            //Thay đổi đường dẫn ảnh
+            $(input).siblings('.thumbnail').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+//Khi click #thumbnail thì cũng gọi sự kiện click #image
+$(document).ready(function () {
+    $('.thumbnail').click(function () {
+        $(this).siblings('.image').click();
+    });
+});
+
+//Ajax coupon
+$(document).ready(function () {
+    $('.get-coupon').click(function () {
+        var code = $('.code').val();
+        var rowId = $('.rowId').val();
+        console.log(rowId);
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+            method: "GET",
+            url: "cart/get-coupon",
+            data: {
+                code: code,
+                rowId: rowId,
+                _token: _token
+            },
+            success: function (response) {
+                if(response['error']) {
+                    $('.notify-comment').html('<p class="text text-danger">' + response['error'] + '</p>');
+                    $('.code').val('');
+                    setTimeout(function() {
+                        $(".notify-comment").empty();
+                    }, 1000);
+                }
+                else 
+                    location.reload();
+                // if(response['percentage-discount'])
+                //     $('.discount span').text(response['percentage-discount'] + '%');
+                // else 
+                //     $('.discount span').text('$' + response['fixed-discount']);
+
+                // $('.price-total span').text('$' + response['price-total']);
+                // $('.cart-total span').text('$' + response['total']);
+                // $('.code').val('');
+                // $('.rowId').val(response['rowId']);
+                // console.log(response['rowId']);
+                // if($('.discount-coupon').find('span.up-cart').length == 0)
+                //     $('.discount-coupon').append('<span onclick="removeCoupon(\'' + rowId + '\')" class="primary-btn up-cart">Remove discount</span>');
+            },
+            error: function (response) {
+                $('.notify-comment').html('<p class="text text-danger">Code not found!</p>');
+                $('.code').val('');
+                setTimeout(function() {
+                    $(".notify-comment").empty();
+                }, 1000);
+            }
+        });
+    });
+});
+
+function removeCoupon(rowId) {
+    $.ajax({
+        type: "GET",
+        url: "cart/remove-coupon",
+        data: {rowId: rowId},
+        success: function (response) {
+            location.reload();
+            // console.log(response['rowId']);
+            // $('.discount span').text('');
+            // $('.cart-total span').text('$' + response['total']);
+            // $('.up-cart').remove();
+            // $('.code').val('');
+        },
+        error: function (data) {
+           
         },
     });
 }

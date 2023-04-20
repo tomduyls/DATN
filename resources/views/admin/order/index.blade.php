@@ -51,7 +51,7 @@
                                                 <th class="text-center">ID</th>
                                                 <th>Customer / Products</th>
                                                 <th class="text-center">Address</th>
-                                                <th class="text-center">Amount</th>
+                                                <th class="text-center">Total</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-center">Actions</th>
                                             </tr>
@@ -86,7 +86,15 @@
                                                     <td class="text-center">
                                                         {{ $order->street_address . '-' . $order->town_city }}
                                                     </td>
-                                                    <td class="text-center">${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) }}</td>
+                                                    <td class="text-center">
+                                                        @if ($order->coupon_type == "fixed")
+                                                            ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) - $order->coupon_value }}
+                                                        @elseif ($order->coupon_type == "percentage")
+                                                            ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) * $order->coupon_value/100 }}
+                                                        @else
+                                                            ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) }}
+                                                        @endif
+                                                    </td>
                                                     <td class="text-center">
                                                         <div class="badge badge-dark">
                                                             {{ \App\Utilities\Constant::$order_status[$order->status] }}
@@ -97,7 +105,7 @@
                                                             class="btn btn-hover-shine btn-outline-primary border-0 btn-sm">
                                                             Details
                                                         </a>
-                                                        @if ($order->status != \App\Utilities\Constant::order_status_Cancel)
+                                                        @if ($order->status != \App\Utilities\Constant::order_status_Finish && $order->status != \App\Utilities\Constant::order_status_Cancel)
                                                             <a href="/admin/order/{{ $order->id }}/edit" data-toggle="tooltip" title="Edit"
                                                                 data-placement="bottom" class="btn btn-outline-warning border-0 btn-sm">
                                                                 <span class="btn-icon-wrapper opacity-8">

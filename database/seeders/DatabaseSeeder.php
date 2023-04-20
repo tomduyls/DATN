@@ -19,6 +19,24 @@ class DatabaseSeeder extends Seeder
 
         DB::table('users')->insert([
             [
+                'id' => 7,
+                'name' => 'Duy',
+                'email' => 'bsdymspeed@gmail.com',
+                'password' => Hash::make('123456'),
+                'avatar' => null,
+                'level' => 1,
+                'description' => null,
+
+                'company_name' => 'demo',
+                'country' => 'Viet Nam',
+                'street_address' => 'Demo',
+                'postcode_zip' => '10000',
+                'town_city' => 'Ha Noi',
+                'phone' => '0912436573',
+            ],
+        ]);
+        DB::table('users')->insert([
+            [
                 'id' => 6,
                 'name' => 'demo',
                 'email' => 'demo@gmail.com',
@@ -363,6 +381,50 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
+        DB::table('product_comments')->insert([
+            [
+                'product_id' => 1,
+                'user_id' => 4,
+                'email' => 'BrandonKelley@gmail.com',
+                'name' => 'Brandon Kelley',
+                'messages' => 'Nice !',
+                'rating' => 4,
+                'checked' => 0,
+            ],
+            [
+                'product_id' => 1,
+                'user_id' => 5,
+                'email' => 'RoyBanks@gmail.com',
+                'name' => 'Roy Banks',
+                'messages' => 'Nice !',
+                'rating' => 4,
+                'checked' => 1,
+            ],
+        ]);
+
+        DB::table('coupons')->insert([
+            [
+                'name' => 'Duy',
+                'code' => 'fixed',
+                'type' => 'fixed',
+                'amount' => 90,
+                'value' => 50
+            ],
+            [
+                'name' => 'Duy',
+                'code' => 'hethan',
+                'type' => 'fixed',
+                'amount' => 0,
+                'value' => 50
+            ],
+            [
+                'name' => 'Duy',
+                'code' => 'percentage',
+                'type' => 'percentage',
+                'amount' => 90,
+                'value' => 50
+            ],
+        ]);
     }
 }
 

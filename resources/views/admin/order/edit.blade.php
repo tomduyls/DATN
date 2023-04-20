@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', 'Edit Order')
+@section('title', 'Order')
 
 @section('body')
                 <!-- Main -->
@@ -13,7 +13,7 @@
                                     <i class="pe-7s-ticket icon-gradient bg-mean-fruit"></i>
                                 </div>
                                 <div>
-                                    User
+                                    Order
                                     <div class="page-title-subheading">
                                         View, create, update, delete and manage.
                                     </div>

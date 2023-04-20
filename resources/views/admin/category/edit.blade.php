@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', 'Edit Category')
+@section('title', 'Category')
 
 @section('body')
                 <!-- Main -->

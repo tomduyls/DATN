@@ -75,7 +75,7 @@
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
-                            <a href="index.html">
+                            <a href="./">
                                 <img src="front/img/logo.png" height="25" alt="">
                             </a>
                         </div>
@@ -98,7 +98,7 @@
                                     <i class="icon_bag_alt"></i>
                                     <span class="cart-count">{{ Cart::count() }}</span>
                                 </a>
-                                {{-- <div class="cart-hover">
+                                <div class="cart-hover">
                                     <div class="select-items">
                                         <table>
                                             <tbody>
@@ -112,7 +112,7 @@
                                                             </div>
                                                         </td>
                                                         <td class="si-close">
-                                                            <i class="ti-close"></i>
+                                                            <i onclick="removeCart('{{ $cart->rowId }}')" class="ti-close"></i>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -121,15 +121,15 @@
                                     </div>
                                     <div class="select-total">
                                         <span>total:</span>
-                                        <h5>${{ Cart::total() }}</h5>
+                                        <h5>${{ Cart::priceTotal() }}</h5>
                                     </div>
                                     <div class="select-button">
                                         <a href="./cart" class="primary-btn view-card">VIEW CARD</a>
                                         <a href="./checkout" class="primary-btn checkout-btn">CHECK OUT</a>
                                     </div>
-                                </div> --}}
+                                </div>
                             </li>
-                            <li class="cart-price">${{ Cart::total() }}</li>
+                            <li class="cart-price">${{ Cart::priceTotal() }}</li>
                         </ul>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
 
         <div class="nav-item">
             <div class="container">
-                <div class="nav-depart">
+                {{-- <div class="nav-depart">
                     <div class="depart-btn">
                         <i class="ti-menu"></i>
                         <span>All departments</span>
@@ -153,27 +153,27 @@
                             <li ><a href="#">Brand Outdoor Apparel</a></li>
                         </ul>
                     </div>
-                </div>
+                </div> --}}
                 <nav class="nav-menu mobile-menu">
                         <ul>
                             <li class="{{ (request()->segment(1)  == '') ? 'active' : '' }}"><a href="./">Home</a></li>
                             <li class="{{ (request()->segment(1)  == 'shop') ? 'active' : '' }}"><a href="./shop">Shop</a></li>
                             <li><a href="">Collection</a>
                                 <ul class="dropdown">
-                                    <li><a href="">Men's</a></li>
-                                    <li><a href="">Women's</a></li>
-                                    <li><a href="">Kid's</a></li>
+                                    <li><a href="./shop/category/Men">Men's</a></li>
+                                    <li><a href="./shop/category/Women">Women's</a></li>
+                                    <li><a href="./shop/category/Kids">Kid's</a></li>
                                 </ul>
                             </li>
-                            <li><a href="blog.html">Blog</a></li>
-                            <li><a href="contact.html">Contact</a></li>
+                            <li class="{{ (request()->segment(1)  == 'blog') ? 'active' : '' }}"><a href="./blog">Blog</a></li>
+                            <li><a href="./contact">Contact</a></li>
+                            <li><a href="faq.html">Faq</a></li>
                             <li><a href="">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./account/my-order">My Order</a></li>
-                                    <li><a href="blog-details.html">Blog Details</a></li>
+                                    <li><a href="./account/my-account">My Account</a></li>
                                     <li><a href="./cart">Shopping Cart</a></li>
                                     <li><a href="./checkout">Checkout</a></li>
-                                    <li><a href="faq.html">Faq</a></li>
                                     @if (!Auth::user())
                                         <li><a href="./account/register">Register</a></li>
                                         <li><a href="./account/login">Login</a></li>
@@ -233,25 +233,25 @@
                 <div class="col-lg-3">
                     <div class="footer-left">
                         <div class="footer-logo">
-                            <a href="index.html">
+                            <a href="./">
                                 <img src="front/img/footer-logo.png" height="25" alt="">
                             </a>
                         </div>
+                        <ul>
+                            <li>Codelean - codelean</li>
+                            <li>Phone: +84 98.52.81.689</li>
+                            <li>Email: codelean@gmail.com</li>
+                        </ul>
                     </div>
-                    <ul>
-                        <li>Codelean - codelean</li>
-                        <li>Phone: +84 98.52.81.689</li>
-                        <li>Email: codelean@gmail.com</li>
-                    </ul>
                 </div>
                 <div class="col-lg-2 offset-lg-1">
                     <div class="footer-widget">
                         <h5>Information</h5>
                         <ul>
-                            <li><a href="">About us</a></li>
-                            <li><a href="">Check out</a></li>
-                            <li><a href="">Contact</a></li>
-                            <li><a href="">Services</a></li>
+                            <li><a href="./shop">Shop</a></li>
+                            <li><a href="./blog">Blog</a></li>
+                            <li><a href="./contact">Contact</a></li>
+                            <li><a href="./">FAQ</a></li>
                         </ul>
                     </div>
                 </div>
@@ -259,10 +259,10 @@
                     <div class="footer-widget">
                             <h5>My Account</h5>
                             <ul>
-                                <li><a href="">My Account</a></li>
-                                <li><a href="">Contact</a></li>
-                                <li><a href="">Shopping Cart</a></li>
-                                <li><a href="">Shop</a></li>
+                                <li><a href="./account/my-account">My Account</a></li>
+                                <li><a href="./cart">Shopping Cart</a></li>
+                                <li><a href="./checkout">Checkout</a></li>
+                                <li><a href="./account/my-order">My Order</a></li>
                             </ul>
                         </div>
                     </div>

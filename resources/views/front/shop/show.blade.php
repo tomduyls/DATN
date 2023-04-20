@@ -9,8 +9,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text">
-                        <a href="index.html"><i class="fa fa-home"> Home</i></a>
-                        <a href="shop.html"> Home</a>
+                        <a href="./"><i class="fa fa-home"></i> Home</a>
+                        <a href="./shop"> Shop</a>
                         <span>Detail</span>
                     </div>
                 </div>
@@ -37,9 +37,9 @@
                             </div>
                             <div class="product-thumbs">
                                 <div class="product-thumbs-track ps-slider owl-carousel">
-                                    @foreach ($product->productImages as $item)
-                                        <div class="pt active" data-imgbigurl="front/img/products/{{ $item->path }}">
-                                            <img src="front/img/products/{{ $item->path }}" alt="">
+                                    @foreach ($product->productImages as $productImage)
+                                        <div class="pt active" data-imgbigurl="front/img/products/{{ $productImage->path }}">
+                                            <img src="front/img/products/{{ $productImage->path }}" alt="">
                                         </div>
                                     @endforeach
                                 </div>
@@ -48,12 +48,22 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="product-details">
-                                <form action="" method="POST">
+                                <form action="" method="POST" id="showForm">
                                     @csrf
                                     <input type="hidden" name="id" id="id" value="{{ $product->id }}">
                                     <div class="pd-title">
                                         <span>{{ $product->tag }}</span>
                                         <h3>{{ $product->name }}</h3>
+                                    </div>
+                                    <div class="pd-rating">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $product->avgRating)
+                                                <i class="fa fa-star"></i>
+                                            @else
+                                                <i class="fa fa-star-o"></i>
+                                            @endif
+                                        @endfor
+                                        <span>({{ count($product->productComments) }})</span>
                                     </div>
                                     <div class="pd-desc">
                                         <p>{{ $product->content }}</p>
@@ -66,19 +76,23 @@
                                     </div>
                                     
                                     <div class="pd-size-choose">
-                                        {{-- @foreach (array_unique(array_column($product->productDetails->toArray(), 'size')) as $size) --}}
                                         @foreach ($product->productDetails as $productDetail)
                                                 <div class="form-check form-check-inline">
                                                     <input required class="form-check-input" type="radio" name="size" id="xl-{{ $productDetail->size }}" value="{{ $productDetail->size }}" {{ $productDetail->qty <= 0 ? 'disabled' : ''}}>
                                                     <label class="form-check-label" for="xl-{{ $productDetail->size }}" {{ $productDetail->qty <= 0 ? 'disabled' : ''}}>{{ $productDetail->size }} </label>
                                                 </div> 
-                                                {{-- <p>{{$productDetail->qty}} products available</p> --}}
                                         @endforeach
                                     </div>
+                                    <p class="quantity-per-size">
+                                        {{ array_sum(array_column($product->productDetails->toArray(), 'qty')) }} pieces available
+                                    </p>
+                                    <script>
+                                        var sizeArray = @json(array_column($product->productDetails->toArray(), 'qty', 'size'))
+                                    </script>
                                     <div class="quantity">
                                         @if (array_sum(array_column($product->productDetails->toArray(), 'qty')) > 0)
                                         <div class="pro-qty">
-                                            <input type="number" name="qty" value="1" min="1" max="5">
+                                            <input type="number" id="qty-per-size" name="qty" value="1" min="1" max="">
                                         </div>
                                             <button type="submit" class="primary-btn pd-cart" >Add To Cart</button> 
                                         @else <h3>Out of Stock</h3>
@@ -107,7 +121,7 @@
                             <ul class="nav" role="tablist">
                                 <li><a class="active" href="#tab-1" data-toggle="tab" role="tab">DESCRIPTION</a></li>
                                 <li><a href="#tab-2" data-toggle="tab" role="tab">SPECIFICATIONS</a></li>
-                                {{-- <li><a href="#tab-3" data-toggle="tab" role="tab">Customer Reviews ({{ count($product->productComments)}})</a></li> --}}
+                                <li><a href="#tab-3" data-toggle="tab" role="tab">Customer Reviews ({{ count($product->productComments)}})</a></li>
                             </ul>
                         </div>
                         <div class="tab-item-content">
@@ -167,7 +181,76 @@
                                         </table>
                                     </div>
                                 </div>
-                                
+                                <div class="tab-pane fade" id="tab-3" role="tabpanel">
+                                    <div class="customer-review-option">
+                                        <h4>{{ count($product->productComments)}} Comments</h4>
+                                        <div class="comment-option">
+                                            @foreach ($product->productComments as $productComment)
+                                                <div class="co-item">
+                                                    <div class="avatar-pic">
+                                                        <img src="front/img/user/{{ $productComment->user->avatar ?? 'default-avatar.jpg'}}" alt="">
+                                                    </div>
+                                                    <div class="avatar-text">
+                                                        <h5>{{ $productComment->name }} <span>{{ date('M d, Y', strtotime($productComment->created_at)) }}</span></h5>
+                                                        @if ($productComment->checked == 0)
+                                                            This comment is being checked.
+                                                        @else
+                                                            <div class="at-rating">
+                                                                @for($i = 1; $i <= 5; $i++)
+                                                                    @if ($i <= $productComment->rating)
+                                                                        <i class="fa fa-star"></i>
+                                                                    @else
+                                                                        <i class="fa fa-star-o"></i>
+                                                                    @endif
+                                                                @endfor
+                                                            </div>
+                                                            <div class="at-reply">{{ $productComment->messages }}</div>
+                                                        @endif
+                                                        
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        
+                                        <div class="leave-comment">
+                                            <h4>Leave A Comment</h4>
+                                            <form action="#" class="comment-form">
+                                                @csrf
+                                                <input type="hidden" name="product_id" class="product_id" value="{{ $product->id }}">
+                                                <input type="hidden" name="checked" value="0">
+                                                <input type="hidden" name="user_id" class="user_id" value="{{ \Illuminate\Support\Facades\Auth::user()->id ?? null }}">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <input {{ Auth::check() ?  'readonly' : '' }} type="text" placeholder="Name" name="name" class="name" value="{{ Auth::user()->name ?? ''}}">
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <input {{ Auth::check() ?  'readonly' : '' }} type="text" placeholder="Email" name="email" class="email" value="{{ Auth::user()->email ?? ''}}">
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <textarea placeholder="Messages" name="messages" class="messages"></textarea>
+                                                        <div class="personal-rating">
+                                                            <h6>Your Rating</h6>
+                                                            <div class="rate">
+                                                                <input checked type="radio" id="star5" name="rating" class="rating" value="5" />
+                                                                <label for="star5" title="text">5 stars</label>
+                                                                <input type="radio" id="star4" name="rating" class="rating" value="4" />
+                                                                <label for="star4" title="text">4 stars</label>
+                                                                <input type="radio" id="star3" name="rating" class="rating" value="3" />
+                                                                <label for="star3" title="text">3 stars</label>
+                                                                <input type="radio" id="star2" name="rating" class="rating" value="2" />
+                                                                <label for="star2" title="text">2 stars</label>
+                                                                <input type="radio" id="star1" name="rating" class="rating" value="1" />
+                                                                <label for="star1" title="text">1 star</label>
+                                                            </div>
+                                                        </div>
+                                                        <button type="button" class="site-btn cmt-check post-product-comment">Send message</button>
+                                                        <div class="notify-comment"></div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

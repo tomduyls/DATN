@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', 'Order Detail')
+@section('title', 'Order')
 
 @section('body')
                 <!-- Main -->
@@ -72,13 +72,28 @@
                                                         </td>
                                                     </tr>
                                                 @endforeach
-                                                
-    
                                             </tbody>
                                         </table>
                                     </div>
 
+                                    <div class="text-md-right">Price total: ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) }}</div>
 
+                                    <div class="text-md-right">Discount: @if ($order->coupon_type == "fixed")
+                                                        ${{ $order->coupon_value }}
+                                                    @elseif ($order->coupon_type == "percentage")
+                                                        {{ $order->coupon_value }}%
+                                                    @else
+                                                    @endif
+                                    </div>
+                                    
+                                    <div class="text-md-right">Total: @if ($order->coupon_type == "fixed")
+                                                    ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) - $order->coupon_value }}
+                                                @elseif ($order->coupon_type == "percentage")
+                                                    ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) * $order->coupon_value/100 }}
+                                                @else
+                                                    ${{ array_sum(array_column($order->orderDetails->toArray(), 'total')) }}
+                                                @endif
+                                    </div>
 
                                     <h2 class="text-center mt-5">Order info</h2>
                                         <hr>

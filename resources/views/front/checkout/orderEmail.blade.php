@@ -148,9 +148,20 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="">Subtotal</td>
+                                    <td class="">Price total</td>
                                     <td class="pr-3 text-right" style="text-align: right; padding-right: 20px;">
-                                        {{ $subtotal }} $
+                                        <b>{{ $price_total }} $</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="">Discound</td>
+                                    <td class="pr-3 text-right" style="text-align: right; padding-right: 20px;">
+                                        @if ($fixedDiscount > 0)
+                                            {{ "$".$fixedDiscount }}
+                                        @elseif ($percentageDiscount > 0)
+                                            {{ $percentageDiscount."%" }}
+                                        @else 
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr style="font-size: 18px;">

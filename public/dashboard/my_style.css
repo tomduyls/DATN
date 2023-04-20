@@ -63,3 +63,15 @@ nav[aria-label="Pagination Navigation"] a:hover {
 .ui-theme-settings .btn-open-options {
     bottom: 48px;
 }
+
+.stats {
+    margin-top: 1rem;
+    background-color: white;
+    margin-bottom: 6rem;
+}
+
+.sale-chart {
+    background-color: white;
+    border-radius: .25rem;
+    max-height: 300px;
+}

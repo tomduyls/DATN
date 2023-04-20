@@ -18,4 +18,19 @@ class BlogService extends BaseService implements BlogServiceInterface
     {
         return $this->repository->getLatestBlogs($limit);
     }
+
+    public function getRelatedBlogs($blog, $limit = 2)
+    {
+        return $this->repository->getRelatedBlogs($blog, $limit);
+    }
+
+    public function getBlogOnIndex($request)
+    {
+        return $this->repository->getBlogOnIndex($request);
+    }
+
+    public function getBlogByCategory($categoryName, $request)
+    {
+        return $this->repository->getBlogByCategory($categoryName, $request);
+    }
 }

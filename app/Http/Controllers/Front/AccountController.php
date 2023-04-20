@@ -7,6 +7,7 @@ use App\Service\Order\OrderServiceInterface;
 use App\Utilities\Constant;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Utilities\Common;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,20 +87,6 @@ class AccountController extends Controller
         return redirect('account/login')->with('notification', "Register Success! Please login.");
     }
 
-    public function myOrderIndex()
-    {
-        $orders = $this->orderService->getOrderByUserId(Auth::id());
-
-        return view('front.account.my-order.index', compact('orders'));
-    }
-
-    public function myOrderShow($id)
-    {
-        $order = $this->orderService->find($id);
-
-        return view('front.account.my-order.show', compact('order'));
-    }
-
     public function forgotPass()
     {
         if(Auth::id())
@@ -159,5 +146,81 @@ class AccountController extends Controller
         $this->userService->update($data, $id);
 
         return redirect('account/login')->with('notification', "Success! Please login.");
+    }
+
+    //My Order
+    public function myOrderIndex()
+    {
+        $orders = $this->orderService->getOrderByUserId(Auth::id());
+
+        foreach($orders as $order) {
+            $coupon_id = $order->orderDetails[0]->coupon;
+            if($coupon_id != null) {
+                $order->coupon_type = $coupon_id->type;
+                $order->coupon_value = $coupon_id->value;
+            }
+        }
+
+        return view('front.account.my-order.index', compact('orders'));
+    }
+
+    public function myOrderShow($id)
+    {
+        $order = $this->orderService->find($id);
+
+        $coupon_id = $order->orderDetails[0]->coupon;
+        if($coupon_id != null) {
+            $order->coupon_type = $coupon_id->type;
+            $order->coupon_value = $coupon_id->value;
+        }
+
+        return view('front.account.my-order.show', compact('order'));
+    }
+
+    //My Account
+    public function myAccountIndex()
+    {
+        $user = $this->userService->find(Auth::id());
+
+        return view('front.account.my-account.index', compact('user'));
+    }
+
+    public function myAccountEdit()
+    {
+        $user = $this->userService->find(Auth::id());
+
+        return view('front.account.my-account.edit', compact('user'));
+    }
+
+    public function myAccountUpdate(Request $request)
+    {
+        $request->validate([
+            'email' => 'unique:users,email,'.$request->id,
+            'password_confirmation' => 'same:password'
+        ]);
+        $data = $request->all();
+
+        //Xu ly mat khau
+        if ($request->get('password') != null)
+            $data['password'] = bcrypt($request->get('password'));
+        else
+            unset($data['password']);
+
+        //Xu ly file anh
+        if ($request->hasFile('image')) {
+            //Them file moi
+            $data['avatar'] = Common::uploadFile($request->file('image'), 'front/img/user');
+
+            //Xoa file cu
+            $file_name_old = $request->get('image_old');
+            if($file_name_old != '') {
+                unlink('front/img/user/' . $file_name_old);
+            }
+        }
+
+        //Cap nhat du lieu
+        $this->userService->update($data, $request->id);
+
+        return redirect('./account/my-account')->with('notification', 'Update account succeed!');
     }
 }

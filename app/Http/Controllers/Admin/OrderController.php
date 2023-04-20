@@ -19,6 +19,7 @@ class OrderController extends Controller
     {
         $this->orderService = $orderService;
         $this->productService = $productService;
+        $this->middleware('CheckOrderStatus', ['only' => 'edit']);
     }
     /**
      * Display a listing of the resource.
@@ -28,6 +29,14 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $orders = $this->orderService->searchAndPaginate('first_name', $request->get('search'));
+
+        foreach($orders as $order) {
+            $coupon_id = $order->orderDetails[0]->coupon;
+            if($coupon_id != null) {
+                $order->coupon_type = $coupon_id->type;
+                $order->coupon_value = $coupon_id->value;
+            }
+        }
 
         return view('admin.order.index', compact('orders'));
     }
@@ -62,6 +71,12 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = $this->orderService->find($id);
+
+        $coupon_id = $order->orderDetails[0]->coupon;
+        if($coupon_id != null) {
+            $order->coupon_type = $coupon_id->type;
+            $order->coupon_value = $coupon_id->value; 
+        }
 
         return  view('admin.order.show', compact('order'));
     }
