@@ -67,14 +67,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="position-relative row form-group">
+                                        {{-- <div class="position-relative row form-group">
                                             <label for="content"
                                                 class="col-md-3 text-md-right col-form-label">Content</label>
                                             <div class="col-md-9 col-xl-8">
                                                 <input required name="content" id="content"
                                                     placeholder="Content" type="text" class="form-control" value="{{ $product->content }}">
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="position-relative row form-group">
                                             <label for="price"

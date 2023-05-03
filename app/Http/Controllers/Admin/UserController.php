@@ -6,6 +6,7 @@ use App\Service\User\UserServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Utilities\Common;
+use App\Utilities\Constant;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -139,14 +140,17 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $this->userService->delete($user->id);
+        if($user->level != Constant::user_level_host) {
+            $this->userService->delete($user->id);
 
-        //Xoa file:
-        $file_name = $user->avatar;
-            if($file_name != '') {
-                unlink('front/img/user/' . $file_name);
-            }
+            //Xoa file:
+            $file_name = $user->avatar;
+                if($file_name != '') {
+                    unlink('front/img/user/' . $file_name);
+                }
 
-        return redirect('admin/user');
+            return redirect('admin/user');
+        }
+        else return redirect('admin/user')->with('notification', "Error: Can't remove host account");
     }
 }

@@ -52,10 +52,10 @@
                                         <span style="color:red;"> {{$message}}</span>
                                     @enderror
                                 </div>
-                                <div class="col-lg-12">
+                                {{-- <div class="col-lg-12">
                                     <label for="cun-name">Company Name</label>
                                     <input type="text" id="cun-name" name="company_name" value="{{ Auth::user()->company_name ?? old('company_name')}}">
-                                </div>
+                                </div> --}}
                                 <div class="col-lg-12">
                                     <label for="cun">Country <span>*</span></label>
                                     <input type="text" id="cun" name="country" value="{{ Auth::user()->country ?? old('country')}}">

@@ -92,7 +92,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="position-relative row form-group">
+                                        {{-- <div class="position-relative row form-group">
                                             <label for="company_name" class="col-md-3 text-md-right col-form-label">
                                                 Company Name
                                             </label>
@@ -101,7 +101,7 @@
                                                     placeholder="Company Name" type="text" class="form-control"
                                                     value="{{ $user->company_name }}">
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="position-relative row form-group">
                                             <label for="country"

@@ -38,10 +38,10 @@
                                 <label for="last">Last Name</label>
                                 <input disabled type="text" id="last" value="{{ $order->last_name }}">
                             </div>
-                            <div class="col-lg-12">
+                            {{-- <div class="col-lg-12">
                                 <label for="cun-name">Company Name</label>
                                 <input disabled type="text" id="cun-name" value="{{ $order->company_name }}">
-                            </div>
+                            </div> --}}
                             <div class="col-lg-12">
                                 <label for="cun">Country</label>
                                 <input disabled type="text" id="cun" value="{{ $order->country }}">

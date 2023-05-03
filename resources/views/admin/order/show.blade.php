@@ -120,14 +120,14 @@
                                         </div>
                                     </div>
 
-                                    <div class="position-relative row form-group">
+                                    {{-- <div class="position-relative row form-group">
                                         <label for="company_name" class="col-md-3 text-md-right col-form-label">
                                             Company Name
                                         </label>
                                         <div class="col-md-9 col-xl-8">
                                             <p>{{ $order->company_name }}</p>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="position-relative row form-group">
                                         <label for="street_address" class="col-md-3 text-md-right col-form-label">
@@ -177,13 +177,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="position-relative row form-group">
+                                    {{-- <div class="position-relative row form-group">
                                         <label for="description"
                                             class="col-md-3 text-md-right col-form-label">Description</label>
                                         <div class="col-md-9 col-xl-8">
                                             <p>{{ $order->description }}</p>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     
                                 </div>

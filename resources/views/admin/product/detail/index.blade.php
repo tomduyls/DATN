@@ -34,7 +34,7 @@
                         <div class="col-md-12">
                             <div class="main-card mb-3 card">
 
-                                <div class="card-header">
+                                {{-- <div class="card-header">
 
                                     <form>
                                         <div class="input-group">
@@ -50,7 +50,7 @@
                                     </form>
 
                                     
-                                </div>
+                                </div> --}}
 
                                 <div class="table-responsive">
                                     <table class="align-middle mb-0 table table-borderless table-striped table-hover">
