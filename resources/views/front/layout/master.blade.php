@@ -167,7 +167,7 @@
                             </li>
                             <li class="{{ (request()->segment(1)  == 'blog') ? 'active' : '' }}"><a href="./blog">Blog</a></li>
                             <li><a href="./contact">Contact</a></li>
-                            <li><a href="faq.html">Faq</a></li>
+                            <li><a href="./">Faq</a></li>
                             <li><a href="">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./account/my-order">My Order</a></li>
